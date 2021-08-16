@@ -14,13 +14,12 @@ const getPublicRepos = async (req: Request, res: Response): Promise<void> => {
       data = cache
     }else {
       data = await searchService.fetchData(username);
+      redisClient.saveWithTtl(
+        username,
+        data,
+        5
+      )
     }
-
-    redisClient.saveWithTtl(
-      username,
-      data,
-      5
-    )
 
     res.status(200)
       .send({
